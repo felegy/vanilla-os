@@ -27,6 +27,8 @@ stages:
     type: apt
     source:
       packages:
+      - scdaemon
+      - curl
       - vim
 
   - name: example-commands # Sample module demonstrating the Shell module with custom commands
