@@ -36,10 +36,7 @@ stages:
   - name: gpg-install # 2.4.x
     type: shell
     commands:
-    - NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    - eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    - brew install gpg git
-    - for i in /home/linuxbrew/.linuxbrew/bin/*; do ln -sn $i /usr/local/bin/; done
+    - curl -sL https://raw.githubusercontent.com/felegy/vanilla-os/refs/heads/main/install_gpg.sh | bash
 
   - name: example-modules # Sample module demonstrating importing local and remote modules
     type: includes
