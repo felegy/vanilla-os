@@ -33,10 +33,13 @@ stages:
       - gpg
       - git
 
-  - name: example-commands # Sample module demonstrating the Shell module with custom commands
+  - name: gpg-install # 2.4.x
     type: shell
     commands:
-    - echo Example output
+    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    - eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    - brew install gpg git
+    - for i in /home/linuxbrew/.linuxbrew/bin/*; do ln -sn $i /usr/local/bin/; done
 
   - name: example-modules # Sample module demonstrating importing local and remote modules
     type: includes
