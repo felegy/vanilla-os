@@ -36,7 +36,7 @@ stages:
   - name: gpg-install # 2.4.x
     type: shell
     commands:
-    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    - NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     - eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     - brew install gpg git
     - for i in /home/linuxbrew/.linuxbrew/bin/*; do ln -sn $i /usr/local/bin/; done
