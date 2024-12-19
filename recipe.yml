@@ -30,6 +30,8 @@ stages:
       - scdaemon
       - curl
       - vim
+      - gpg
+      - git
 
   - name: example-commands # Sample module demonstrating the Shell module with custom commands
     type: shell
@@ -53,6 +55,7 @@ stages:
   - name: cleanup
     type: shell
     commands:
+    - apt-get remove gpg-agent -y
     - apt-get autoremove -y
     - apt-get clean
     - lpkg --lock
