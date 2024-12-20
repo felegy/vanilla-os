@@ -33,11 +33,6 @@ stages:
       - gpg
       - git
 
-  - name: gpg-install # 2.4.x
-    type: shell
-    commands:
-    - curl -sL https://raw.githubusercontent.com/felegy/vanilla-os/refs/heads/main/install_gpg.sh | bash
-
   - name: example-modules # Sample module demonstrating importing local and remote modules
     type: includes
     includes:
@@ -55,7 +50,6 @@ stages:
   - name: cleanup
     type: shell
     commands:
-    - apt-get remove gpg-agent -y
     - apt-get autoremove -y
     - apt-get clean
     - lpkg --lock
