@@ -28,7 +28,7 @@ stages:
     source:
       packages:
       - libassuan-dev
-      - scdaemon
+      #- scdaemon
       - curl
       - vim
       - gpg
