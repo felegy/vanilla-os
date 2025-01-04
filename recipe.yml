@@ -19,7 +19,11 @@ stages:
     type: shell
     commands:
     - lpkg --unlock
+    - echo 'deb http://deb.debian.org/debian experimental main' | tee /etc/apt/sources.list.d/experimental.list
     - apt-get update
+    - apt-get upgrade -y
+    - apt-get install -t experimental gpg -y
+    - apt-get autoremove -y
 
   # Put your custom actions below this comment
 
@@ -27,7 +31,7 @@ stages:
     type: apt
     source:
       packages:
-      - libassuan-dev
+      #- libassuan-dev
       #- scdaemon
       - curl
       - vim
