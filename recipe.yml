@@ -38,6 +38,20 @@ stages:
       #- gpg
       #- git
 
+  - name: cloudflared-install
+    type: shell
+    commands:
+    - mkdir -p /usr/local/bin
+    - curl -sLo /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+    - chmod +x /usr/local/bin/cloudflared
+    - /usr/local/bin/cloudflared update
+
+  - name: extra-settings
+    type: shell
+    commands:
+    - systemctl disable pcscd
+    
+  
   #- name: gpg-install # 2.4.x
   #  type: shell
   #  commands:
