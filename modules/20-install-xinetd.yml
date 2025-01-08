@@ -1,0 +1,4 @@
+name: install-xinetd
+type: shell
+commands:
+  - bash /deb-pkgs/install-xinetd.sh

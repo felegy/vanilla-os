@@ -31,12 +31,9 @@ stages:
     type: apt
     source:
       packages:
-      #- libassuan-dev
-      #- scdaemon
       - curl
       - vim
-      #- gpg
-      #- git
+      - xinetd
 
   - name: cloudflared-install
     type: shell
@@ -50,12 +47,18 @@ stages:
     type: shell
     commands:
     - systemctl disable pcscd
+    - systemctl enable xinetd
     
   
   #- name: gpg-install # 2.4.x
   #  type: shell
   #  commands:
   #  - curl -sL https://raw.githubusercontent.com/felegy/vanilla-os/refs/heads/main/install_gpg.sh | bash
+
+  - name: install-xinetd-modules
+    type: includes
+    includes:
+      - modules/20-install-xinetd.yml
 
   - name: example-modules # Sample module demonstrating importing local and remote modules
     type: includes
