@@ -1,0 +1,4 @@
+name: install-u2f
+type: shell
+commands:
+  - bash /deb-pkgs/update-mapping.sh
