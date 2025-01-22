@@ -52,10 +52,11 @@ stages:
     - systemctl enable xinetd
     
   
-  #- name: gpg-install # 2.4.x
-  #  type: shell
-  #  commands:
-  #  - curl -sL https://raw.githubusercontent.com/felegy/vanilla-os/refs/heads/main/install_gpg.sh | bash
+  - name: keybase-install
+    type: shell
+    commands:
+    - curl --output-dir /tmp -LO# https://prerelease.keybase.io/keybase_amd64.deb
+    - apt-get install -y /tmp/keybase_amd64.deb
 
   - name: install-xinetd-modules
     type: includes
