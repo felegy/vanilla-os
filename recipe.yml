@@ -37,6 +37,7 @@ stages:
       - libpam-u2f 
       - pamu2fcfg
       - remmina
+      - pcscd
 
   - name: cloudflared-install
     type: shell
