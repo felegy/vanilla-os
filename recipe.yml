@@ -36,6 +36,7 @@ stages:
       - xinetd
       - libpam-u2f 
       - pamu2fcfg
+      - remmina
 
   - name: cloudflared-install
     type: shell
