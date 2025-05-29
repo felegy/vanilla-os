@@ -60,16 +60,12 @@ stages:
     - systemctl disable pcscd
     - systemctl enable xinetd
     
+  
   - name: keybase-install
     type: shell
     commands:
     - curl --output-dir /tmp -LO# https://prerelease.keybase.io/keybase_amd64.deb
     - apt-get install -y /tmp/keybase_amd64.deb
-
-  - name: install-gnupg-modules
-    type: includes
-    includes:
-      - modules/10-install-gnupg.yml
 
   - name: install-xinetd-modules
     type: includes
