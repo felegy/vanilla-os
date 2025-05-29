@@ -59,7 +59,11 @@ stages:
     commands:
     - systemctl disable pcscd
     - systemctl enable xinetd
-    
+
+  - name: instal-gnupg-modules
+    type: includes
+    includes:
+      - modules/10-instal-gnupg.yml
   
   - name: keybase-install
     type: shell
