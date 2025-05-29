@@ -1,0 +1,4 @@
+name: install-gnupg
+type: shell
+commands:
+  - bash /deb-pkgs/install-gnupg.sh
