@@ -22,7 +22,8 @@ TEMPDIR=$(mktemp -d)
     tar xf gnupg-${GNUPG_VERSION}.tar.bz2
 
     cd gnupg-${GNUPG_VERSION}
-    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --docdir="/usr/share/doc/gnupg-${GNUPG_VERSION}" --enable-all-tests --enable-g13
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --docdir="/usr/share/doc/gnupg-${GNUPG_VERSION}" --runstatedir=/run  --enable-all-tests --enable-g13 \
+        --enable-symcryptrun --enable-large-secmem --with-capabilities
 
     if [ $? -ne 0 ]; then
         echo "Configuration failed. Exiting."
