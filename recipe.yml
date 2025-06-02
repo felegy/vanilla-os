@@ -57,7 +57,7 @@ stages:
   - name: extra-settings
     type: shell
     commands:
-    - systemctl disable pcscd
+    #- systemctl disable pcscd
     - systemctl enable xinetd
 
   - name: instal-gnupg-modules
