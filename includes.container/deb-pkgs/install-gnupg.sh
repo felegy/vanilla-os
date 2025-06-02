@@ -35,8 +35,6 @@ TEMPDIR=$(mktemp -d)
     else
         make install
     fi
-    
-    apt-get remove --purge -y build-essential bzip2
 
 )
 # Clean up temporary directory
