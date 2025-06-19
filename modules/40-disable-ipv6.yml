@@ -1,0 +1,4 @@
+name: disable-ipv6
+type: shell
+commands:
+  - bash /deb-pkgs/disable-ipv6.sh
