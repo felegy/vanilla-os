@@ -1,0 +1,131 @@
+name: Custom Vanilla Desktop # Replace this name with your image name
+id: custom # Replace this ID with your image ID
+stages:
+- id: build
+  base: ghcr.io/vanilla-os/desktop:main # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
+  singlelayer: false
+  labels:
+    maintainer: self-maintained # Optionally, Replace this with your name
+  args:
+    DEBIAN_FRONTEND: noninteractive # Set the image environment as non-interactive
+  
+  # Commands to run first before building the modules
+  runs:
+    commands:
+      - echo 'APT::Install-Recommends "1";' > /etc/apt/apt.conf.d/01norecommends
+
+  modules:
+  - name: init-setup
+    type: shell
+    commands:
+    - lpkg --unloc
+    - apt-get update
+
+  # Put your custom actions below this comment
+
+  - name: install-custom-packages
+    type: shell
+    commands:
+      - echo 'deb http://deb.debian.org/debian experimental main' | tee /etc/apt/sources.list.d/experimental.list
+      - apt-get update -qqq && apt-get upgrade -y
+      - apt-get install curl apt-transport-https -y
+      - apt-get install -t experimental gpg scdaemon git -y
+      - curl -s https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+      - mv packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+      - chown root:root /etc/apt/keyrings/packages.microsoft.gpg
+      - chmod 644 /etc/apt/keyrings/packages.microsoft.gpg
+      - echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main' | tee /etc/apt/sources.list.d/vscode.list > /dev/null
+      - rm -f packages.microsoft.gpg
+      - apt-get update -qqq
+      - apt-get install code -y
+
+  - name: additionel-packages # Sample module using the built-in Apt module to install packages
+    type: apt
+    source:
+      packages:
+      - vim
+      - vim
+      - xinetd
+      - libpam-u2f 
+      - pamu2fcfg
+      - remmina
+      - pcscd
+  
+  - name: cloudflared-install
+    type: shell
+    commands:
+      - curl --output-dir /tmp -sLO https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+      - apt-get install -y /tmp/cloudflared-linux-amd64.deb
+  
+  - name: keybase-install
+    type: shell
+    commands:
+    - curl --output-dir /tmp -sLO https://prerelease.keybase.io/keybase_amd64.deb
+    - apt-get install -y /tmp/keybase_amd64.deb
+
+  - name: install-xinetd
+    type: shell
+    commands:
+      - bash /deb-pkgs/install-xinetd.sh
+
+  - name: setup-u2f-login
+    type: shell
+    commands:
+      - bash /deb-pkgs/update-mapping.sh
+
+  - name: disable-ipv6-modules
+    type: shell
+    commands:
+      - echo "blacklist ipv6" > /etc/modprobe.d/blacklist-ipv6.conf
+      - echo "options ipv6 disable=1" >> /etc/modprobe.d/blacklist-ipv6.conf
+      - echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+      - echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+      - echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+
+  - name: extra-settings
+    type: shell
+    commands:
+    - systemctl disable pcscd
+    - systemctl enable xinetd  
+
+  - name: example-modules # Sample module demonstrating importing local and remote modules
+    type: includes
+    includes:
+      - modules/50-install-debs.yml # Sample local module present in this repository
+      # - gh:vanilla-os/dev-image:main:modules/00-basics.yml # Sample GitHub remote module in the format: `gh:your-name/your-repo:branch:modules/file.yml`
+      # - https://raw.githubusercontent.com/Vanilla-OS/dev-image/main/modules/05-go.yml # Sample full URL remote module
+
+  # Put your custom actions above this comment
+
+  - name: set-image-name-abroot
+    type: includes
+    includes:
+      - modules/80-set-image-abroot-config.yml
+
+  - name: cleanup
+    type: shell
+    commands:
+    - apt-get autoremove -y
+    - apt-get clean
+    - lpkg --lock
+
+  - name: fsguard
+    type: fsguard
+    CustomFsGuard: false
+    FsGuardLocation: "/usr/sbin/FsGuard"
+    GenerateKey: true
+    FilelistPaths: ["/usr/bin"]
+    modules:
+      - name: remove-prev-fsguard
+        type: shell
+        commands:
+          - rm -rf /FsGuard 
+          - rm -f ./minisign.pub ./minisign.key 
+          - chmod +x /usr/sbin/init
+
+  - name: cleanup2
+    type: shell
+    commands:
+      - rm -rf /tmp/*
+      - rm -rf /var/tmp/*
+      - rm -rf /sources
