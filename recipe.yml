@@ -5,7 +5,8 @@ stages:
   base: ghcr.io/vanilla-os/desktop:main # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
   singlelayer: false
   labels:
-    maintainer: self-maintained # Optionally, Replace this with your name
+    maintainer: felegy # github.com/felegy | keybase.io/felegy | 0x45A8240C14DE6D58
+    description: Custom Vanilla Desktop image with additional packages and configurations.
   args:
     DEBIAN_FRONTEND: noninteractive # Set the image environment as non-interactive
   
@@ -44,13 +45,12 @@ stages:
     source:
       packages:
       - vim
-      - vim
       - xinetd
       - libpam-u2f 
       - pamu2fcfg
       - remmina
       - pcscd
-  
+
   - name: cloudflared-install
     type: shell
     commands:
@@ -81,12 +81,19 @@ stages:
       - echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
       - echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
       - echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+  
+  - name: setup-chrony
+    type: shell
+    commands:
+      - apt-get install -t experimental chrony -y
+    # - timedatectl set-ntp true
+    # - systemctl enable chronyd
 
   - name: extra-settings
     type: shell
     commands:
-    - systemctl disable pcscd
-    - systemctl enable xinetd  
+      - systemctl disable pcscd
+      - systemctl enable xinetd
 
   - name: example-modules # Sample module demonstrating importing local and remote modules
     type: includes
