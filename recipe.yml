@@ -86,8 +86,8 @@ stages:
     type: shell
     commands:
       - apt-get install -t experimental chrony -y
-    # - timedatectl set-ntp true
-    # - systemctl enable chronyd
+      - echo 'server time.cloudflare.com iburst' > /etc/chrony/sources.d/cloudflare-server.sources
+      - chmod +x /etc/rc.local
 
   - name: extra-settings
     type: shell
