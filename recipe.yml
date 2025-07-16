@@ -51,6 +51,7 @@ stages:
       - remmina
       - pcscd
       - clevis
+      - clevis-tpm2
 
   - name: cloudflared-install
     type: shell
