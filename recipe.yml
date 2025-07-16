@@ -50,6 +50,7 @@ stages:
       - pamu2fcfg
       - remmina
       - pcscd
+      - clevis
 
   - name: cloudflared-install
     type: shell
