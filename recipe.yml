@@ -40,9 +40,10 @@ stages:
       - curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
       - curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
       - apt-get update -qqq
-      - apt-get install code brave-browser -y
+      - code_version="$(apt-cache policy code | awk '/Candidate:/ {print $2}')" && apt-get install code=$code_version -y
+      - brave_version="$(apt-cache policy brave-browser | awk '/Candidate:/ {print $2}')" && apt-get install brave-browser=$brave_version -y
 
-  - name: additionel-packages # Sample module using the built-in Apt module to install packages
+  - name: additional-packages # Sample module using the built-in Apt module to install packages
     type: apt
     source:
       packages:
